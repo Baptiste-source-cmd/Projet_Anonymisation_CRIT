@@ -32,4 +32,4 @@ for doc in docs:
                     if w2 is None: # Vérifie que l'élément <form> existe
                         continue
                     mots.append(w2.text) # Récupère le texte contenu dans <form> et l'ajoute à la liste "mots"
-                f.write(f"{who} {code} {start} {end} : {' '.join(mots)}\n")
+                f.write(f"{who} {code} {start} {end} : {' '.join(mots)}\n")#
