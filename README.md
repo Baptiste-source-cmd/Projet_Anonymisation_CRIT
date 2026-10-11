@@ -6,6 +6,7 @@ Premier outil développé autour de la bibliothèque Python Element Tree
 https://docs.python.org/3/library/xml.etree.elementtree.html
 ## Objectif
 -Extraire et normaliser un corpus ici de type XML au format TEI/TXM : retirer les annotations XML pour préparer les données à anonymiser
+
 -À noter que les données ne sont pas intégrées au commit : de par leur caractère confidentiel, elles sont stockées hors du dépôt.
 
 ## Utilisation
