@@ -4,9 +4,6 @@
 # Caches Python
 __pycache__/
 *.pyc
-
-# Secrets
 .env
-
 # Données (enregistrements, transcriptions, etc.)
 data/
