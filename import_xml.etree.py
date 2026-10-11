@@ -8,11 +8,9 @@ TXM = '{http://textometrie.org/1.0}'
 for doc in docs:
     if doc.endswith(".xml"):
         print(doc)
-        # Parse (lit et analyse) le fichier XML
-        tree = ET.parse(doc)
-        # Cherche tous les éléments <u> du namespace TEI
-        root = tree.getroot()        
-        # <u> correspond ici à une unité de parole / intervention
+        tree = ET.parse(doc)    # Parse (lit et analyse) le fichier XML
+        root = tree.getroot()  # Cherche tous les éléments <u> du namespace TEI      
+        # <u> correspond ici à une unité de parole 
         u = root.iter(TEI + "u")
         liste_1 = []
         for u_iter in u:
@@ -35,4 +33,3 @@ for doc in docs:
                         continue
                     mots.append(w2.text) # Récupère le texte contenu dans <form> et l'ajoute à la liste "mots"
                 f.write(f"{who} {code} {start} {end} : {' '.join(mots)}\n")
-        break
