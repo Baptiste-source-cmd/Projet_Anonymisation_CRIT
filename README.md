@@ -1,7 +1,7 @@
 # Projet d'anonymisation CRIT (corpus CEM-TXM)
 outils développés dans le cadre du projet CRIT
 
-Premier outil développé autour de la bibliothèque Python Element Tree pour retirer les balises XML du corpus proprement sur l'ensemble du corpus.
+Premier outil développé autour de la bibliothèque Python Element Tree
 
 https://docs.python.org/3/library/xml.etree.elementtree.html
 ## Objectif
