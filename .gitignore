@@ -4,6 +4,9 @@
 # Caches Python
 __pycache__/
 *.pyc
+
 .env
-# Données (enregistrements, transcriptions, etc.)
-data/
+
+.txt
+.tsv
+.xml
