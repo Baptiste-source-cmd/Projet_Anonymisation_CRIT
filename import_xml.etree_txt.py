@@ -18,7 +18,7 @@ for doc in docs:
             if u_iter is not None:
                 print(u_iter.attrib)
 
-        with open("modifié.txt", "w", encoding="UTF-8") as f:
+        with open(doc.replace(".xml", ".txt"), "w", encoding="UTF-8") as f:
             for i in liste_1: 
                 who = i.get("who") # Récupère l'attribut "who" du <u> # 
                 start = i.get("start") # Récupère l'attribut "start" 
@@ -33,4 +33,3 @@ for doc in docs:
                         continue
                     mots.append(w2.text) # Récupère le texte contenu dans <form> et l'ajoute à la liste "mots"
                 f.write(f"{who} {code} {start} {end} : {' '.join(mots)}\n")#
-        break
