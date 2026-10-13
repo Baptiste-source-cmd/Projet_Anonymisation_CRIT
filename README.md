@@ -1,6 +1,7 @@
 # Projet_Anonymisation_CRIT
+
 outils développés dans le cadre du projet CRIT
-<<<<<<< HEAD
+
 =======
 
 ## Objectif
@@ -55,5 +56,4 @@ Les colonnes sont les suivantes; ==> exemples
 - ==> Remise des balises d'entités nommées : abandonné, les balises ne sont pas assez bien annotées
 
 ## Auteurs
-Développé par moi-même et mes collègues de travail dans cadre d'un projet universitaire d'anonymisation de données.
->>>>>>> 9cefde85baacafe3c2398f385872fe1497c794db
+Développé par mes collègues de travail et moi-même dans cadre d'un projet universitaire d'anonymisation de données.
