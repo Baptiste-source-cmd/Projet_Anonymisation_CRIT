@@ -5,7 +5,11 @@ outils développés dans le cadre du projet CRIT
 ## Objectif
 -Extraire et normaliser un corpus ici de type XML au format TEI/TXM : retirer les annotations XML pour préparer les données à anonymiser et les exploiter dans un NER (reconnaissance d'entité nommée) et/ou du machine learning
 
--À noter que les données ne sont pas intégrées au commit : de par leur caractère confidentiel, elles sont stockées hors du dépôt.
+-À noter que les données ne sont pas intégrées au commit : de par leur caractère confidentiel, elles sont stockées hors du dépôt, et les extensions concernées sont dans le gitignore;
+* .xml
+* .tsv
+* .txt
+* à changer éventuellement : envoyer les données dans un sous-dossier inscrit dans le gitignore.
 
 ## Outils/librairies 
 https://docs.python.org/3/library/xml.etree.elementtree.html <== Document ElementTree
