@@ -44,9 +44,8 @@ Les colonnes sont les suivantes; ==> exemples
 ### Version TXT
 -Le script permet donc de retirer l'ensemble des balises, et de ne conserver que le texte, à cela s'ajoute le contenu de quelques autres balises, les balises de timecode, la balise qui permet de savoir qui parle, et la balise du code de l'individu, cela donne une ligne qui ressemble à :
 
--"Who" "Code" "Début" "Fin du tour": "texte"
-
--exemple : Témoin Pierre 55.45000000 57.9999000000 : le corpus est dexmlisé
+* "Who" "Code" "Début" "Fin du tour": "texte"
+* exemple : Témoin Pierre 55.45000000 57.9999000000 : le corpus est dexmlisé
 
 ## État d'avancement actuel
 - [x] Extraction des tours de parole depuis les XML TEI
