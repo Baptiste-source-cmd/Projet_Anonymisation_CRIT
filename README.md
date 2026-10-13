@@ -2,8 +2,6 @@
 
 outils développés dans le cadre du projet CRIT
 
-=======
-
 ## Objectif
 -Extraire et normaliser un corpus ici de type XML au format TEI/TXM : retirer les annotations XML pour préparer les données à anonymiser et les exploiter dans un NER (reconnaissance d'entité nommée) et/ou du machine learning
 
@@ -53,6 +51,7 @@ Les colonnes sont les suivantes; ==> exemples
 - [x] Rajout des informations grammaticales et date
 - [ ] Structuration avec pandas
 - [ ] Application d'un tsv avec GLINER
+- [ ] prévoir le code inverse vers une réxmlisation
 - ==> Remise des balises d'entités nommées : abandonné, les balises ne sont pas assez bien annotées
 
 ## Auteurs
