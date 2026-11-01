@@ -48,5 +48,5 @@ for doc in docs:
 
 
 ## écriture du contenu de chaque élément à l'intérieur des balises stockés ------------------------------------------------------                      
-                    f.write(f"{doc}\t{date_enreg}\t{nb_tour_parole}\t{who}\t{code}\t{start}\t{end}\t{word2}\t{lem}\t\t{POs}\t{w2}\n") ## même chose que pour les colonnes, sauf qu'on prend ici le contenu des strings, et pas le nom de la colonne
+                    f.write(f"{doc}\t{date_enreg}\t{nb_tour_parole}\t{who}\t{code}\t{start}\t{end}\t{word2}\t{lem}\t{POs}\t{w2}\n") ## même chose que pour les colonnes, sauf qu'on prend ici le contenu des strings, et pas le nom de la colonne
                 f.write("\n") # saute une ligne à chaque fin de u
