@@ -5,8 +5,10 @@ from gliner2 import AutoExtractor
 path = "S:/CEM/CORPUS-CEM-TXM"
 ## modèle : python -m pip install "gliner2[local]"
 model = AutoExtractor.from_pretrained("fastino/gliner2.5-multi-v1")
-
 print(os.getcwd())
+
+sortie = os.path.join(path, "résultats")
+os.makedirs(sortie, exist_ok=True)
 
 # parcourir la liste des tsv 
 for doc in os.listdir(path):
@@ -19,5 +21,9 @@ for doc in os.listdir(path):
             mots = df[df["index_u"] == numero]["forme"]
             texte =" ".join(mots)
             resultat = model.extract_entities(texte,["person", "location"])
-            print(resultat)
-            break
+        print(resultat)
+        
+        # soretie du document
+        nouveau = os.path.join(sortie, doc.replace(".tsv", "_NER.tsv"))
+        df.to_csv(nouveau, sep="\t", index=False)
+        break
