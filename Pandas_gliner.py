@@ -21,9 +21,17 @@ for doc in os.listdir(path):
         for numero in mot: 
             mots = df[df["index_u"] == numero]["forme"]
             texte =" ".join(mots)
-            resultat = model.extract_entities(texte,["person", "location"])
-            resultats.append(f"{texte}\n{resultat}\n")
+            resultat = model.extract_entities(texte,{
+            "person": "Noms propres de personnes identifiables, à l'exclusion des pronoms, des professions et des relations familiales",
+            "location": "Noms propres de lieux géographiques et de régions, à l'exclusion des villes, des pays, des noms communs et des expressions spatiales vagues",
+            "organization": "Noms propres d'organisations, d'entreprises, d'associations et d'institutions, à l'exclusion des noms génériques d'institutions",
+            "city": "Noms propres de villes et de communes",
+            "country": "Noms propres de pays et d'États souverains"})
+            print(texte)
+            print(resultat)
         
+            resultats.append(f"{texte}\n{resultat}\n")
+
         # soretie du document
         nouveau = os.path.join(sortie, doc.replace(".tsv", "_NER.txt"))
         with open (nouveau, "w", encoding="utf-8") as f:
