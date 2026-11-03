@@ -38,7 +38,7 @@ for doc in os.listdir(path):
             "organization": "Noms propres d'organisations, d'entreprises, d'associations et d'institutions, à l'exclusion des noms génériques d'institutions",
             "city": "Noms propres de villes et de communes",
             "country": "Noms propres de pays et d'États souverains",
-            "origine": "Termes désignant une origine géographique ou régionale d'un peuple ou d'une communauté, comme européen, français, américain, russe,"},include_confidence=True,include_spans=True)
+            "origine": "Gentilés, noms et adjectifs désignant l'appartenance ou l'origine géographique, nationale ou régionale de personnes ou de groupes humains, au singulier comme au pluriel, au masculin comme au féminin"},include_confidence=True,include_spans=True,)
             print(texte)
             print(resultat)
         
@@ -56,11 +56,18 @@ for doc in os.listdir(path):
                         xml = ET.tostring(balise, encoding="unicode") ##permet de transformer les balises elementTree en string manipulables
                         positions.append((entité["start"], entité["end"], xml))# Source - https://stackoverflow.com/a/6304835  
                         
-            for start, end, xml in sorted(positions, reverse=True): ## Source - https://stackoverflow.com/a/43764525 ## j'avais une erreur valueError : "Must have equal len keys"  dans le cas où il y a une phrase avec deux balises, les valeurs start/end correspondent plus, il fallait donc trier pour que ça commence par la fin des phrases
-                texte_annoté = (f"{texte_annoté[:start]}{xml}{texte_annoté[end:]}") # Source - https://stackoverflow.com/a/59965745 [end] renvoyait une erreur d'indexage, sans :, la séquence s'arrête pas après "end"
+            limite = None
+            for start, end, xml in sorted(positions, reverse=True):
+                if limite is None or end <= limite:
+                    texte_annoté = (f"{texte_annoté[:start]}{xml}{texte_annoté[end:]}) # Source - https://stackoverflow.com/a/59965745 [end] renvoyait une erreur d'indexage, sans :, la séquence s'arrête pas après "end"
+                    limite = start 
                 print(texte_annoté)
+                
             df.loc[mots.index, "annoté"] = texte_annoté.split(" ")
             texte_xmlisé.append(texte_annoté)
+
+
+
 
         # soretie du document
         gliner_brute = os.path.join(sortie, doc.replace(".tsv", "_NER.txt"))
