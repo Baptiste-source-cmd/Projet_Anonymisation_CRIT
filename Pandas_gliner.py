@@ -38,7 +38,7 @@ for doc in os.listdir(path):
             "organization": "Noms propres d'organisations, d'entreprises, d'associations et d'institutions, à l'exclusion des noms génériques d'institutions",
             "city": "Noms propres de villes et de communes",
             "country": "Noms propres de pays et d'États souverains",
-            "origine": "Termes désignant une origine géographique ou régionale, comme maghrébin, algérien, marocain ou européen"},include_confidence=True,include_spans=True)
+            "origine": "Termes désignant une origine géographique ou régionale d'un peuple ou d'une communauté, comme européen, français, américain, russe,"},include_confidence=True,include_spans=True)
             print(texte)
             print(resultat)
         
