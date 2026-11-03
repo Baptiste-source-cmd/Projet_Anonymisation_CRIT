@@ -2,6 +2,7 @@
 import os 
 import pandas as pd
 from gliner2 import AutoExtractor
+import xml.etree.ElementTree as ET
 path = "S:/CEM/CORPUS-CEM-TXM"
 ## modèle : python -m pip install "gliner2[local]"
 model = AutoExtractor.from_pretrained("fastino/gliner2.5-multi-v1")
@@ -14,23 +15,48 @@ os.makedirs(sortie, exist_ok=True)
 for doc in os.listdir(path):
     if doc.endswith(".tsv"):
         fichier = os.path.join(path, doc)
+        print(doc)
         df = pd.read_csv(fichier, sep="\t", dtype=str, keep_default_na=False)
         df.head()
+
+        #préparation colonne vide pour xmliser gliner
+        df["annoté"] = df["forme"]
+         
+        # reconstitution en phrases
         resultats = []
-        mot = df["index_u"].unique()
-        for numero in mot: 
-            mots = df[df["index_u"] == numero]["forme"]
+        mot = df["index_u"].unique()  # permet d'extraire les doublons
+        for numero in mot: #compte l'ensemble de l'index (à quelle séquence de <u> ils appartiennent), et chaque valeur ne peut apparaître qu'une seule fois : c'est pratique parce que les données sont coupées par mots, ça évite de répéter mon comptage
+            comptage_phrase = df[df["index_u"] == numero]
+            mots = comptage_phrase["forme"]
             texte =" ".join(mots)
+            
+          # extraction données par gliner  
             resultat = model.extract_entities(texte,{
             "person": "Noms propres de personnes identifiables, à l'exclusion des pronoms, des professions et des relations familiales",
             "location": "Noms propres de lieux géographiques et de régions, à l'exclusion des villes, des pays, des noms communs et des expressions spatiales vagues",
             "organization": "Noms propres d'organisations, d'entreprises, d'associations et d'institutions, à l'exclusion des noms génériques d'institutions",
             "city": "Noms propres de villes et de communes",
-            "country": "Noms propres de pays et d'États souverains"})
+            "country": "Noms propres de pays et d'États souverains"},include_confidence=True,include_spans=True)
             print(texte)
             print(resultat)
         
             resultats.append(f"{texte}\n{resultat}\n")
+#annotation xml 
+
+            texte_annoté = texte ##je reprends mon texte pour éviter de casser gliner qui utilise la variable texte
+            positions = [] ## j'ai besoin de savoir où commence mes éléments à annoter et j'utilise donc include_spans (qui me permet de savoir quand entité démarre dans la phrase) et je l'introduit dans positions
+
+            for cat, entités in resultat["entities"].items(): #exemple gliner : {'entities': {'person': [{'text': 'magistère', 'confidence': 0.7929778099060059, 'start': 10, 'end': 19}], 'location': []}}
+                    for entité in entités:
+                        balise = ET.Element(cat) ## https://docs.python.org/3/library/xml.etree.elementtree.html#building-xml-documents
+                        balise.text = entité["text"] ## avec include_spans, entities devient un dictionnaire et plus un tuple, il faut que j'annote uniquement "text"
+                        xml = ET.tostring(balise, encoding="unicode") ##permet de transformer les balises elementTree en string manipulables
+                        positions.append((entité["start"], entité["end"], xml))# Source - https://stackoverflow.com/a/6304835  
+                        
+            for start, end, xml in positions: #je parcours ma liste positions
+                texte_annoté = (f"{texte_annoté[:start]}{xml}{texte_annoté[end:]}") # Source - https://stackoverflow.com/a/59965745 [end] renvoyait une erreur d'indexage, sans :, la séquence s'arrête pas après "end"
+                print(texte_annoté)
+        df.loc[mots.index, "annoté"] = texte_annoté.split(" ")
 
         # soretie du document
         nouveau = os.path.join(sortie, doc.replace(".tsv", "_NER.txt"))
