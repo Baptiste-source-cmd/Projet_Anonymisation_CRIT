@@ -34,28 +34,21 @@ for doc in os.listdir(path):
             
           # extraction données par gliner  
             resultat = model.extract_entities_long(texte,{
-            "person": "Prénoms et noms de personnes physiques, y compris les prénoms seuls, rares ou peu fréquents, les noms de famille seuls, les surnoms et les pseudonymes, notamment après des expressions comme : 'je m'appelle', 'mon prénom est', 'moi c'est, je suis'",
-            "location": "Noms propres de lieux géographiques, de régions, départements, provinces, territoires et zones géographiques précises, à l'exclusion des villes, des pays, des adresses postales, des noms communs et des expressions spatiales vagues",
-            "organization": "Noms propres d'organisations, d'associations, d'administrations, d'institutions publiques, de syndicats, de fondations et d'organismes identifiables, à l'exclusion des noms génériques d'institutions, des entreprises et des universités classées séparément",
-            "city": "Noms propres de villes, de communes, de villages et de localités identifiables, y compris les communes étrangères et les petites localités",
-            "country": "Noms propres de pays et d'États souverains, y compris leurs dénominations officielles et leurs formes courantes",
-            "origine": "Gentilés, noms et adjectifs désignant l'appartenance ou l'origine géographique, nationale ou régionale de personnes ou de groupes humains, au singulier comme au pluriel, au masculin comme au féminin, notamment après des expressions comme je suis, je suis d'origine, mes parents sont",
-            "job": "Noms de métiers, de professions, d'emplois, de fonctions professionnelles et de postes occupés par une personne, y compris les métiers rares, les appellations familières, les formes féminines et masculines, notamment après je travaille comme, je suis, je fais, mon métier est, je travaille en tant que",
-            "company": "Noms propres d'entreprises, de sociétés, de commerces, de marques commerciales et d'employeurs identifiables, notamment après je travaille chez, je suis employé par, dans l'entreprise, chez, à l'exclusion des noms génériques de secteurs d'activité",
-            "university": "Noms propres d'universités, de facultés, de grandes écoles et d'établissements d'enseignement supérieur identifiables, y compris leurs sigles et abréviations, notamment après j'étudie à, j'ai étudié à, je suis diplômé de",
-            "school": "Noms propres d'établissements scolaires, de collèges, de lycées et de centres de formation identifiables, à l'exclusion des universités et des noms génériques d'établissements",
-            "age": "Âges de personnes exprimés en chiffres ou en lettres, notamment j'ai 25 ans, elle a vingt ans, à l'âge de 18 ans, âgé de 30 ans, ainsi que les mentions explicites de tranches d'âge comme la trentaine, à l'exclusion des durées et des nombres sans rapport avec l'âge",
-            "date": "Dates calendaires, années, mois, jours, dates de naissance, dates de décès, périodes chronologiques et expressions temporelles précises, exprimées en chiffres ou en lettres, notamment le '12 mars 1998', en '2005', depuis 'septembre 2010', à l'exclusion des durées et des expressions temporelles vagues",
-            "address": "Adresses postales précises, noms propres de rues, avenues, boulevards, places, numéros de rue, codes postaux et autres éléments permettant de localiser précisément un domicile ou un établissement, à l'exclusion des simples noms de villes et de pays",
-            "email": "Adresses électroniques personnelles ou professionnelles complètes, contenant un identifiant, le symbole arobase et un nom de domaine",
-            "phone": "Numéros de téléphone personnels ou professionnels, fixes ou mobiles, français ou internationaux, avec ou sans indicatif téléphonique, éventuellement séparés par des espaces ou des points",
-            "diploma": "Noms et intitulés précis de diplômes, certifications, titres scolaires et universitaires, qualifications et niveaux de formation, notamment CAP, BEP, bac professionnel, licence, master, doctorat et BTS",
-            "nationality": "gentilés comme maghrébins, et mentions explicites de nationalité ou de citoyenneté juridique, notamment nationalité française, citoyenneté espagnole, double nationalité, lorsque le texte désigne un statut juridique et non une simple origine géographique"},
+            "personne": "Noms propres désignant des personnes physiques : prénoms, noms de famille, noms complets, surnoms et pseudonymes",
+            "organisation": "Noms propres et sigles désignant des organismes publics ou privés, entreprises, universités, laboratoires, instituts, administrations et associations, INRS. Commence souvent par une majuscule ou est une acronyme, xclure les hésitations et marqueurs de remplissage de l'oral comme euh, heu, hum, hm, ben et bah.",
+            "ville": "Noms propres de villes, communes et villages, uniquement lorsqu'ils désignent des lieux géographiques et non des établissements ou organisations",
+            "pays": "Noms propres de pays et d'États souverains, exclusivement",
+            "lieu": "Noms propres de quartiers, régions, départements, provinces et sites géographiques. Exclure les villes, pays et noms d'organisations",
+            "origine": "Gentilés, nationalités et expressions désignant l'origine géographique ou nationale des personnes. Exclure les noms de pays seuls",
+            "métier": "Noms de professions, fonctions, postes et qualifications professionnelles. Exclure les noms d'employeurs et d'établissements",
+            "âge": "Âge d'une personne exprimé en chiffres ou en lettres. Exclure les durées et périodes chronologiques",
+            "date": "Dates calendaires, années et périodes temporelles explicites. Exclure les âges et durées"},
             chunk_size=256,
             chunk_overlap=64,
             batch_size=1,
             include_confidence=True,
-            include_spans=True)
+            include_spans=True,
+            overlap_policy="allow",)
 
             print(texte)
             print(resultat)
@@ -74,11 +67,12 @@ for doc in os.listdir(path):
                         xml = ET.tostring(balise, encoding="unicode") ##permet de transformer les balises elementTree en string manipulables
                         positions.append((entité["start"], entité["end"], xml))# Source - https://stackoverflow.com/a/6304835  
                         
-            limite = None
-            for start, end, xml in sorted(positions, reverse=True): ##avec les annotations, xml faisait bugger gliner en décalant les phrases, il a fallu trouver une solution : j'introduis une lecture inversée de positions pour supprimer la deuxième annotation à la volée
-                if limite is None or end <= limite:
-                    texte_annoté = (f"{texte_annoté[:start]}{xml}{texte_annoté[end:]}") # Source - https://stackoverflow.com/a/59965745 [end] renvoyait une erreur d'indexage, sans :, la séquence s'arrête pas après "end"
-                    limite = start 
+            for start, end, xml in sorted(positions, reverse=True):
+                balise = ET.fromstring(xml)
+                ouverture = f"<{balise.tag}>"
+                fermeture = f"</{balise.tag}>"
+                texte_annoté = texte_annoté[:end] + fermeture + texte_annoté[end:]
+                texte_annoté = texte_annoté[:start] + ouverture + texte_annoté[start:]
                 print(texte_annoté)
                 
             df.loc[mots.index, "annoté"] = texte_annoté.split(" ")
